@@ -1,0 +1,11 @@
+{
+  "name": "drag-and-drop-out",
+  "version": "1.0.0",
+  "description": "Just kids simple dragging and dropping",
+  "main": "main.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "K Dog",
+  "license": "ISC"
+}
