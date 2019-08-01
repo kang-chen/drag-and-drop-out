@@ -1,0 +1,72 @@
+body {
+  height: 350px;
+}
+.box {
+    height: 100px;
+    width: 100px;
+    background-color: black;
+    position: relative;
+    top: 5px;
+    left: 5px;
+    cursor: pointer;
+    margin: 50px;
+  }
+  
+  .held {
+    border: solid 10px black;
+    background-color: black;
+  }
+  
+  .holder {
+    height: 110px;
+    width: 110px;
+    margin: 10px;
+    border: solid 5px black;
+    background-color: white;
+    display: inline-block;
+  }
+  
+  .hovered {
+    border: dotted 5px black;
+  }
+  
+  .invisible {
+    display: none;
+  }
+  
+  #container {
+    margin: auto;
+    top: 100px;
+    width: 400px;
+    position: relative;
+  }
+
+  .dragenter {
+    background-color: purple; 
+    transition: width 2s linear 1s;
+  }
+
+/* #drop-zone-2 {
+  width: 800px;
+  height: 600px;
+} */
+
+#container-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end
+}
+
+#container-drop {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+#drop-zone-3 {
+    height: 350px;
+    width: 600px;
+}
+
