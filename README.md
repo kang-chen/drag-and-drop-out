@@ -49,9 +49,9 @@ dnd.init();
 
 ### Usage (Standalone)
 
-```npm run build```
-
 To generate standalone file `draganddropout.min.js`
+
+```npm run build```
 
 You can either upload to CDN or include it inline in your html with `<script></script>` tags. We can then initialize it on the window object with `window.DragAndDropOut.default.init();`. Refer to module usage for argument list.
 
