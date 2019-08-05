@@ -1,6 +1,6 @@
 {
   "name": "drag-and-drop-out",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Just kids simple dragging and dropping",
   "main": "main.js",
   "scripts": {
