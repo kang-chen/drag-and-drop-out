@@ -2,6 +2,8 @@
 
 Simple instantiation of the HTML5 drag and drop API
 
+![](drag-promo-one.gif)
+
 ### Installing
 
 In your project directory:
