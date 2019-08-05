@@ -4,8 +4,37 @@
   "description": "Just kids simple dragging and dropping",
   "main": "main.js",
   "scripts": {
-    "test": "test"
+    "test": "mocha --require @babel/register",
+    "build": "browserify -s DragAndDropOut -r ./ | minify > draganddropout.min.js"
   },
-  "author": "K Dog",
-  "license": "ISC"
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "@babel/preset-env"
+          ]
+        }
+      ]
+    ]
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/register": "^7.5.5",
+    "babel-minify": "^0.5.0",
+    "babelify": "^10.0.0",
+    "browserify": "^16.3.0",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.0"
+  },
+  "author": "K (Kang Chen)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  }
 }

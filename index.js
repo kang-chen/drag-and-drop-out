@@ -1,36 +1,23 @@
-const mainModule = (function () {
+const dndModule = (function () {
 
     const state = {
         selectedBoxId: null,
         dragged: null,
         x: null,
-        y: null
+        y: null,
+        pairingEnabled: false
     }
 
     let containerClass = null;
-    let boxClass = null;
-    let containerContainerId = null;
-    let boxContainerId = null;
-
-    const DnD = function(c, b, cc = 'container-drop', bc = 'container-box') {    
-        containerClass = c;
-        boxClass = b;
-        containerContainerId = cc;
-        boxContainerId = bc;
-    };
+    let boxContainer = null;
 
     const addMultipleEventListeners = function(element, eventsMap) {
-    Object.keys(eventsMap).forEach(function(key) {
-        element.addEventListener(key, eventsMap[key]);
-    })
-    }
-
-    const setState = function(newState) {
-        state = {state, ...newState};
+        Object.keys(eventsMap).forEach(function(key) {
+            element.addEventListener(key, eventsMap[key]);
+        })
     }
 
     const handleClick = function(event) {
-        randomOtherFunction();
         state.selectedBoxId = event.target.id;
     }
     
@@ -41,90 +28,106 @@ const mainModule = (function () {
 
     const handleDragEnd = function( event ) {
         // reset the transparency
-        state.dragged = null;
         event.target.style.opacity = "";
+        state.dragged = null;
+    };
+
+    const handleDragOver = function( event ) {
+        // prevent default to allow drop
+        event.preventDefault();
     };
     
+    const handleDragEnter = function( event ) {
+        event.target.classList.add('dragenter');
+    }
+
+    const handleDragLeave = function( event ) {
+        event.target.classList.remove('dragenter');
+        if(Array.from(event.target.classList).includes('box')) {
+            event.preventDefault();
+            event.target.parentNode.removeChild(state.dragged);
+            boxContainer.appendChild(state.dragged);
+        } else {
+            event.preventDefault();
+        }
+    }
+
+    const handleContainerDrop = function( event ) {
+        if(Array.from(event.target.classList).includes('box')) {
+            event.preventDefault();
+        } else {
+            event.preventDefault();
+            // move dragged elem to the selected drop target
+            event.target.classList.remove('dragenter');
+            const containerDataKey = event.target.getAttribute('data-pairing-key');
+            const boxDataKey = state.dragged.getAttribute('data-pairing-key');
+            
+            if (state.pairingEnabled ) {
+                if (containerDataKey === boxDataKey) {
+                    state.dragged.parentNode.removeChild(state.dragged);
+                    // const draggedRect = state.dragged.getBoundingClientRect();
+                    // state.dragged.style.position = 'absolute';
+                    // state.dragged.style.left = draggedRect.y;
+                    // state.dragged.style.top = draggedRect.x;
+                    event.target.appendChild(state.dragged);
+                }
+            }
+            else {
+                state.dragged.parentNode.removeChild(state.dragged);
+                event.target.appendChild(state.dragged);
+            }
+        }
+    }
+
+    const handleBoxDrop = function( event ) {
+        event.stopImmediatePropagation();
+        event.preventDefault();
+        event.target.classList.remove('dragenter');
+    }
+
     const draggableEventsMap = {
         'click': handleClick,
         'dragstart': handleDragStart,
-        'dragend': handleDragEnd
+        'dragend': handleDragEnd,
+        'drop': handleBoxDrop
+    }   
+
+    const containerEventsMap = {
+        'dragover': handleDragOver,
+        'dragenter': handleDragEnter,
+        'dragleave': handleDragLeave,
+        'drop': handleContainerDrop
     }
 
-    var generateId = function() {
-        // Math.random should be unique because of its seeding algorithm.
-        // Convert it to base 36 (numbers + letters), and grab the first 9 characters
-        // after the decimal.
-        return '_' + Math.random().toString(36).substr(2, 9);
-    }
-
+    const DnD = function(c='drop-zone') {    
+        containerClass = c;
+    };
+    
     DnD.prototype.init = function() {
         const containers = document.getElementsByClassName(containerClass);    
-        const boxes = document.getElementsByClassName(boxClass);
+        const boxes = document.querySelectorAll('[draggable]');
+        boxContainer = boxes[0].parentNode;
 
+        if (document.querySelectorAll('[data-pairing-key]').length > 1) {
+            state.pairingEnabled = true;
+        }
+        
         for(const box of boxes) {
             addMultipleEventListeners(box, draggableEventsMap);
-            
-            box.addEventListener("drop", function( event ) {
-                event.stopImmediatePropagation();
-                event.preventDefault();
-                event.target.classList.remove('dragenter');
-            });
         }
-    
+
         for(const container of containers) {
-
-            container.addEventListener("dragover", function( event ) {
-                // prevent default to allow drop
-                event.preventDefault();
-            });
-
-            container.addEventListener("dragenter", function( event ) {
-                event.target.classList.add('dragenter');
-            });
-
-            container.addEventListener("dragleave", function( event ) {
-                event.target.classList.remove('dragenter');
-                if(Array.from(event.target.classList).includes('box')) {
-                    event.preventDefault();
-                    event.target.parentNode.removeChild(state.dragged);
-                    document.getElementById(boxContainerId).appendChild(state.dragged); 
-                } else {
-                    event.preventDefault();
-                    
-                }
-            });
-
-            container.addEventListener("drop", function( event ) {
-                // event delegation
-                console.log('this state dragged id', state.dragged.id);
-                if(Array.from(event.target.classList).includes('box')) {
-                    event.preventDefault();
-                } else {
-                event.preventDefault();
-                // move dragged elem to the selected drop target
-                event.target.classList.remove('dragenter');
-                const containerDataKey = event.target.getAttribute('data-pairing-key');
-                const boxDataKey = state.dragged.getAttribute('data-pairing-key');
-
-                    if ( containerDataKey === boxDataKey) {
-                        state.dragged.parentNode.removeChild(state.dragged);
-                        event.target.appendChild(state.dragged);
-                    }
-                }
-            });
-
-            //if dragged outside of the drop zone then do something else
-
+            addMultipleEventListeners(container, containerEventsMap);
         }
     }
 
     DnD.prototype.clean = function() {
-        console.log('clean');
+        
     }
 
     return DnD;
     
 })();
 
-export default mainModule
+
+export default dndModule
