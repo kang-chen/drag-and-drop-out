@@ -16,16 +16,16 @@ npm install drag-and-drop-out
 
 ```
     <div>
-        <div id="draggable-box-1" draggable="true" data-pairing-key='1'></div>
-        <div id="draggable-box-2" draggable="true" data-pairing-key='2'></div>
-        <div id="draggable-box-3" draggable="true" data-pairing-key='3'></div>
+        <div draggable="true" data-pairing-key='1'></div>
+        <div draggable="true" data-pairing-key='2'></div>
+        <div draggable="true" data-pairing-key='3'></div>
     </div>
-    <div id="container-drop">
-        <div id="drop-zone-1" class="drop-zone" data-pairing-key='1'>
+    <div>
+        <div class="drop-zone" data-pairing-key='1'>
         </div>
-        <div id="drop-zone-2" class="drop-zone" data-pairing-key='2'>
+        <div class="drop-zone" data-pairing-key='2'>
         </div>
-        <div id="drop-zone-3" class="drop-zone" data-pairing-key='3'>
+        <div class="drop-zone" data-pairing-key='3'>
         </div>
     </div>
 ```
@@ -48,6 +48,14 @@ const dnd = new DnD('drop-zone');
 dnd.init();
 
 ```
+Use the attribute `data-pairing-key` if you want to lock a draggable element to a specific container:
+
+```
+<div draggable="true" data-pairing-key='1'></div>
+<div class="drop-zone" data-pairing-key='1'></div>
+```
+
+Which means the drop zone will only accept draggable elements that have `data-pairing-key='1'`
 
 ### Usage (Standalone)
 

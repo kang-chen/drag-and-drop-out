@@ -3,8 +3,6 @@ const dndModule = (function () {
     const state = {
         selectedBoxId: null,
         dragged: null,
-        x: null,
-        y: null,
         pairingEnabled: false
     }
 
